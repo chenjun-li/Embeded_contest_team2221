@@ -1,0 +1,140 @@
+#include "mbed.h"
+#include"ultrasonic.h"             
+PwmOut conveyor(A5); 
+PwmOut steer(A1);
+DigitalOut trigger(D12);
+DigitalIn echo(D11);
+DigitalOut SignalOut(D10);
+
+DigitalOut a7(A7);
+DigitalOut a6(A6);
+
+DigitalIn a2(A2);
+DigitalIn a3(A3);
+DigitalIn a4(A4);
+DigitalOut d2(D2);
+DigitalOut d3(D3);
+DigitalOut d4(D9);
+DigitalOut d6(D6);
+
+Timer sonar;
+
+float delay=0;
+float distance1=0;   
+//BusOut display(D2,D3,D4,D5);
+
+int new_angel = 0, last_angel = 0;
+
+//  1.5s/r
+void run_angel(int a)
+{
+    int tmp = a / 90;
+    while(tmp > 0)
+    {
+        steer.write(0.058f);
+       // wait_ms(225);
+       wait_ms(570);
+        tmp--;
+    }
+    steer.write(0.075f);
+}
+
+int main() {
+         //while(1){
+//            run_angel(90);
+//            wait(1);  
+//            run_angel(90);
+//            wait(1);
+//            run_angel(90);
+//            wait(1);
+//            run_angel(90);
+//            wait(1);
+//        }  
+
+        a7 = 0;
+        
+        SignalOut=0;
+        conveyor.period(0.01f);//0.01s==period
+        sonar.reset();//reset the timer
+        sonar.start();//art the timer
+        while(echo==2)
+        {
+            delay=sonar.read_us();
+            //measure the delay of the echoing
+        }
+        sonar.stop();
+      
+
+    while(1)
+    {
+  
+        conveyor.write(0.20f);//30%duty cycle of conveyor    
+        
+        trigger=1;
+        sonar.reset();
+        wait_us(10);
+        trigger=0;
+/*************Start the ultrasonic***********/
+        
+        while(echo==0){};//waiting echo to be high
+        sonar.start();
+        while(echo==1){};//waiting echo to be low
+        sonar.stop();
+        distance1=(sonar.read_us()-delay)*170*0.0001;
+        
+        if(distance1<20)
+        {
+            wait_ms(300);
+            SignalOut=1;
+            conveyor.write(0.08f);//20%duty cycle of conveyor
+            wait_ms(1000);
+            conveyor.write(0.20f);
+        }
+        else 
+        {
+            SignalOut=0;
+            conveyor.write(0.20f);
+        }
+/*************End the ultrasonic***********/
+
+/****************leds_start******************/
+//        a6 = 1, a7 = 0;
+//        a6 = 0, a7 = 1;
+        if(a4 == 1) a6 = 1, a7 = 0;
+        else a6 = 0, a7 = 1;
+
+        int Input2 = 0, Input3 = 0;
+        Input2 = a2, Input3 = a3;
+        if(Input2 > 0 ) Input2 = 1;
+        if(Input3 > 0 ) Input3 = 1;
+        int i = 4;
+        i = Input2*2 + Input3;
+        switch(i)
+        {
+            case 0: d2 = 0, d3 = 1, d4 = 1, d6 = 1; new_angel = 0; break; //0001 1
+            case 1: d2 = 1, d3 = 0, d4 = 1, d6 = 1; new_angel = 90; break; //0010 2 
+            case 2: d2 = 1, d3 = 1, d4 = 0, d6 = 1; new_angel = 180; break; //0100 4
+            case 3: d2 = 1, d3 = 1, d4 = 1, d6 = 0; new_angel = 270; break; //1000 8
+        }
+        
+        int angel = new_angel - last_angel;
+        if(angel < 0) angel = angel + 360;
+        if(angel != 0) {
+              int num_run = angel / 90;
+              for(int i = 1;i <= num_run; i++)
+                 {run_angel(90);wait(0.5f);} 
+            }
+        last_angel = new_angel;
+        
+        wait_ms(500);
+        
+/****************leds_end******************/
+        
+         
+   
+
+    }
+    
+    
+    
+}

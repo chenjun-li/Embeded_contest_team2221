@@ -1,0 +1,217 @@
+Neural Network Tools for STM32 v1.4.0 (AI tools v5.2.0)
+Created date       : 2021-09-12 17:03:10
+Parameters         : generate -m D:\project_art_pi_lab1\fruit_ network\Models\Tflites\fruit64.tflite -o 20210912\X-CUBE-AI\App -w stm32ai_ws -n network -c 1
+
+Exec/report summary (generate dur=0.68s err=0)
+------------------------------------------------------------------------------------------------------------------------
+model file         : D:\project_art_pi_lab1\fruit_ network\Models\Tflites\fruit64.tflite
+type               : tflite (tflite) 
+c_name             : network
+compression        : None
+quantize           : None
+workspace dir      : D:\RT-AK-main\RT-AK\rt_ai_tools\stm32ai_ws
+output dir         : D:\RT-AK-main\RT-AK\rt_ai_tools\20210912\X-CUBE-AI\App
+
+model_name         : fruit64
+model_hash         : 7e3e20377a4062467b64aa2e4d5d6692
+input              : conv2d_4_input [12288 items, 12.00 KiB, ai_u8, scale=0.003921568859368563, zero_point=0, (64, 64, 3)]
+inputs (total)     : 12.00 KiB
+output             : nl_14_fmt [7 items, 8 B, ai_u8, scale=0.00390625, zero_point=0, (1, 1, 7)]
+outputs (total)    : 7 B
+params #           : 131,927 items (130.52 KiB)
+macc               : 2,938,301
+weights (ro)       : 133,652 B (130.52 KiB) 
+activations (rw)   : 14,428 B (14.09 KiB) 
+ram (total)        : 26,723 B (26.10 KiB) = 14,428 + 12,288 + 7
+
+------------------------------------------------------------------------------------------------------------------------
+id  layer (type)               output shape      param #     connected to             macc           rom                
+------------------------------------------------------------------------------------------------------------------------
+0   conv2d_4_input (Input)     (64, 64, 3)                                                                              
+    conversion_0 (Conversion)  (64, 64, 3)                   conv2d_4_input           24,576                            
+------------------------------------------------------------------------------------------------------------------------
+1   conv2d_1 (Conv2D)          (62, 62, 8)       224         conversion_0             861,064        248 (i)            
+    nl_1 (Nonlinearity)        (62, 62, 8)                   conv2d_1                                                   
+------------------------------------------------------------------------------------------------------------------------
+2   pool_2 (Pool)              (31, 31, 8)                   nl_1                                                       
+------------------------------------------------------------------------------------------------------------------------
+3   conv2d_3 (Conv2D)          (29, 29, 16)      1,168       pool_2                   981,392        1,216 (i)          
+    nl_3 (Nonlinearity)        (29, 29, 16)                  conv2d_3                                                   
+------------------------------------------------------------------------------------------------------------------------
+4   pool_4 (Pool)              (14, 14, 16)                  nl_3                                                       
+------------------------------------------------------------------------------------------------------------------------
+5   conv2d_5 (Conv2D)          (12, 12, 32)      4,640       pool_4                   668,192        4,736 (i)          
+    nl_5 (Nonlinearity)        (12, 12, 32)                  conv2d_5                                                   
+------------------------------------------------------------------------------------------------------------------------
+6   pool_6 (Pool)              (6, 6, 32)                    nl_5                                                       
+------------------------------------------------------------------------------------------------------------------------
+7   conv2d_7 (Conv2D)          (4, 4, 64)        18,496      pool_6                   296,000        18,688 (i)         
+    nl_7 (Nonlinearity)        (4, 4, 64)                    conv2d_7                                                   
+------------------------------------------------------------------------------------------------------------------------
+8   pool_8 (Pool)              (2, 2, 64)                    nl_7                                                       
+------------------------------------------------------------------------------------------------------------------------
+9   reshape_9 (Reshape)        (256,)                        pool_8                                                     
+------------------------------------------------------------------------------------------------------------------------
+10  dense_10 (Dense)           (256,)            65,792      reshape_9                65,536         66,560 (i)         
+    nl_10 (Nonlinearity)       (256,)                        dense_10                                                   
+------------------------------------------------------------------------------------------------------------------------
+11  dense_11 (Dense)           (128,)            32,896      nl_10                    32,768         33,280 (i)         
+    nl_11 (Nonlinearity)       (128,)                        dense_11                                                   
+------------------------------------------------------------------------------------------------------------------------
+12  dense_12 (Dense)           (64,)             8,256       nl_11                    8,192          8,448 (i)          
+    nl_12 (Nonlinearity)       (64,)                         dense_12                                                   
+------------------------------------------------------------------------------------------------------------------------
+13  dense_13 (Dense)           (7,)              455         nl_12                    462            476 (i)            
+------------------------------------------------------------------------------------------------------------------------
+14  nl_14 (Nonlinearity)       (7,)                          dense_13                 119                               
+------------------------------------------------------------------------------------------------------------------------
+15  conversion_15 (Conversion) (7,)                          nl_14                                                      
+------------------------------------------------------------------------------------------------------------------------
+fruit64 p=131927(130.52 KBytes) macc=2938301 rom=130.52 KBytes ram=14.09 KiB io_ram=12.01 KiB
+
+
+
+Generated C-graph summary
+------------------------------------------------------------------------------------------------------------------------
+model name         : fruit64
+c-name             : network
+c-node #           : 12
+c-array #          : 37
+activations size   : 14428
+weights size       : 133652
+macc               : 2938301
+inputs             : ['conv2d_4_input_output_array']
+outputs            : ['nl_14_fmt_output_array']
+
+
+C-Arrays (37)
+------------------------------------------------------------------------------------------------------------------------
+c_id  name (*_array)         item/size           mem-pool     c-type         fmt                  comment            
+------------------------------------------------------------------------------------------------------------------------
+0     conv2d_7_scratch1      512/512             activations  int8_t         int/sa                                  
+1     conv2d_7_scratch0      7168/7168           activations  uint8_t        fxp/q(8,0)                              
+2     conv2d_5_scratch1      768/768             activations  int8_t         int/sa                                  
+3     conv2d_5_scratch0      6144/6144           activations  uint8_t        fxp/q(8,0)                              
+4     conv2d_3_scratch1      928/928             activations  int8_t         int/sa                                  
+5     conv2d_3_scratch0      2816/2816           activations  uint8_t        fxp/q(8,0)                              
+6     conv2d_1_scratch1      992/992             activations  int8_t         int/sa                                  
+7     conv2d_1_scratch0      652/652             activations  uint8_t        fxp/q(8,0)                              
+8     dense_13_bias          7/28                weights      const int32_t  int/ss                                  
+9     dense_13_weights       448/448             weights      const int8_t   int/ss                                  
+10    dense_12_bias          64/256              weights      const int32_t  int/ss                                  
+11    dense_12_weights       8192/8192           weights      const int8_t   int/ss                                  
+12    dense_11_bias          128/512             weights      const int32_t  int/ss                                  
+13    dense_11_weights       32768/32768         weights      const int8_t   int/ss                                  
+14    dense_10_bias          256/1024            weights      const int32_t  int/ss                                  
+15    dense_10_weights       65536/65536         weights      const int8_t   int/ss                                  
+16    conv2d_7_bias          64/256              weights      const int32_t  int/ss/channel (64)                     
+17    conv2d_7_weights       18432/18432         weights      const int8_t   int/ss/channel (64)                     
+18    conv2d_5_bias          32/128              weights      const int32_t  int/ss/channel (32)                     
+19    conv2d_5_weights       4608/4608           weights      const int8_t   int/ss/channel (32)                     
+20    conv2d_3_bias          16/64               weights      const int32_t  int/ss/channel (16)                     
+21    conv2d_3_weights       1152/1152           weights      const int8_t   int/ss/channel (16)                     
+22    conv2d_1_bias          8/32                weights      const int32_t  int/ss/channel (8)                      
+23    conv2d_1_weights       216/216             weights      const int8_t   int/ss/channel (8)                      
+24    conv2d_4_input_output  12288/12288         user         uint8_t        int/us               /input             
+25    conversion_0_output    12288/12288         activations  int8_t         int/sa                                  
+26    conv2d_1_output        7688/7688           activations  int8_t         int/sa                                  
+27    conv2d_3_output        3136/3136           activations  int8_t         int/sa                                  
+28    conv2d_5_output        1152/1152           activations  int8_t         int/sa                                  
+29    conv2d_7_output        256/256             activations  int8_t         int/sa                                  
+30    dense_10_output        256/256             activations  int8_t         int/sa                                  
+31    dense_11_output        128/128             activations  int8_t         int/sa                                  
+32    dense_12_output        64/64               activations  int8_t         int/sa                                  
+33    dense_13_output        7/8                 activations  int8_t         int/sa                                  
+34    dense_13_fmt_output    7/28                activations  float          float                                   
+35    nl_14_output           7/28                activations  float          float                                   
+36    nl_14_fmt_output       7/8                 user         uint8_t        int/us               /output            
+------------------------------------------------------------------------------------------------------------------------
+
+
+C-Layers (12)
+------------------------------------------------------------------------------------------------------------------------
+c_id  name (*_layer)  id  type              macc        rom         tensors                   shape (array id)                       
+------------------------------------------------------------------------------------------------------------------------
+0     conversion_0    0   nl                24576       0           I: conv2d_4_input_output  [1, 64, 64, 3] (24)                    
+                                                                    O: conversion_0_output    [1, 64, 64, 3] (25)                    
+------------------------------------------------------------------------------------------------------------------------
+1     conv2d_1        1   optimized_conv2d  861064      248         I: conversion_0_output    [1, 64, 64, 3] (25)                    
+                                                                    S: conv2d_1_scratch0                                             
+                                                                    S: conv2d_1_scratch1                                             
+                                                                    W: conv2d_1_weights                                              
+                                                                    W: conv2d_1_bias                                                 
+                                                                    O: conv2d_1_output        [1, 31, 31, 8] (26)                    
+------------------------------------------------------------------------------------------------------------------------
+2     conv2d_3        3   optimized_conv2d  981392      1216        I: conv2d_1_output        [1, 31, 31, 8] (26)                    
+                                                                    S: conv2d_3_scratch0                                             
+                                                                    S: conv2d_3_scratch1                                             
+                                                                    W: conv2d_3_weights                                              
+                                                                    W: conv2d_3_bias                                                 
+                                                                    O: conv2d_3_output        [1, 14, 14, 16] (27)                   
+------------------------------------------------------------------------------------------------------------------------
+3     conv2d_5        5   optimized_conv2d  668192      4736        I: conv2d_3_output        [1, 14, 14, 16] (27)                   
+                                                                    S: conv2d_5_scratch0                                             
+                                                                    S: conv2d_5_scratch1                                             
+                                                                    W: conv2d_5_weights                                              
+                                                                    W: conv2d_5_bias                                                 
+                                                                    O: conv2d_5_output        [1, 6, 6, 32] (28)                     
+------------------------------------------------------------------------------------------------------------------------
+4     conv2d_7        7   optimized_conv2d  296000      18688       I: conv2d_5_output        [1, 6, 6, 32] (28)                     
+                                                                    S: conv2d_7_scratch0                                             
+                                                                    S: conv2d_7_scratch1                                             
+                                                                    W: conv2d_7_weights                                              
+                                                                    W: conv2d_7_bias                                                 
+                                                                    O: conv2d_7_output        [1, 2, 2, 64] (29)                     
+------------------------------------------------------------------------------------------------------------------------
+5     dense_10        10  dense             65536       66560       I: conv2d_7_output0       [1, 1, 1, 256] (29)                    
+                                                                    W: dense_10_weights                                              
+                                                                    W: dense_10_bias                                                 
+                                                                    O: dense_10_output        [1, 1, 1, 256] (30)                    
+------------------------------------------------------------------------------------------------------------------------
+6     dense_11        11  dense             32768       33280       I: dense_10_output        [1, 1, 1, 256] (30)                    
+                                                                    W: dense_11_weights                                              
+                                                                    W: dense_11_bias                                                 
+                                                                    O: dense_11_output        [1, 1, 1, 128] (31)                    
+------------------------------------------------------------------------------------------------------------------------
+7     dense_12        12  dense             8192        8448        I: dense_11_output        [1, 1, 1, 128] (31)                    
+                                                                    W: dense_12_weights                                              
+                                                                    W: dense_12_bias                                                 
+                                                                    O: dense_12_output        [1, 1, 1, 64] (32)                     
+------------------------------------------------------------------------------------------------------------------------
+8     dense_13        13  dense             448         476         I: dense_12_output        [1, 1, 1, 64] (32)                     
+                                                                    W: dense_13_weights                                              
+                                                                    W: dense_13_bias                                                 
+                                                                    O: dense_13_output        [1, 1, 1, 7] (33)                      
+------------------------------------------------------------------------------------------------------------------------
+9     dense_13_fmt    13  nl                14          0           I: dense_13_output        [1, 1, 1, 7] (33)                      
+                                                                    O: dense_13_fmt_output    [1, 1, 1, 7] (34)                      
+------------------------------------------------------------------------------------------------------------------------
+10    nl_14           14  nl                105         0           I: dense_13_fmt_output    [1, 1, 1, 7] (34)                      
+                                                                    O: nl_14_output           [1, 1, 1, 7] (35)                      
+------------------------------------------------------------------------------------------------------------------------
+11    nl_14_fmt       14  nl                14          0           I: nl_14_output           [1, 1, 1, 7] (35)                      
+                                                                    O: nl_14_fmt_output       [1, 1, 1, 7] (36)                      
+------------------------------------------------------------------------------------------------------------------------
+
+
+ 
+Complexity per-layer - macc=2,938,301 rom=133,652
+------------------------------------------------------------------------------------------------------------------------
+id      layer (type)               macc                                    rom                                    
+------------------------------------------------------------------------------------------------------------------------
+0       conversion_0 (Conversion)  |                                 0.8%  |                                 0.0% 
+1       conv2d_1 (Conv2D)          |||||||||||||||||||||||||||      29.3%  |                                 0.2% 
+3       conv2d_3 (Conv2D)          |||||||||||||||||||||||||||||||  33.4%  |                                 0.9% 
+5       conv2d_5 (Conv2D)          |||||||||||||||||||||            22.7%  |||                               3.5% 
+7       conv2d_7 (Conv2D)          ||||||||||                       10.1%  |||||||||                        14.0% 
+10      dense_10 (Dense)           |||                               2.2%  |||||||||||||||||||||||||||||||  49.8% 
+11      dense_11 (Dense)           ||                                1.1%  ||||||||||||||||                 24.9% 
+12      dense_12 (Dense)           |                                 0.3%  ||||                              6.3% 
+13      dense_13 (Dense)           |                                 0.0%  |                                 0.4% 
+14      nl_14 (Nonlinearity)       |                                 0.0%  |                                 0.0% 
+------------------------------------------------------------------------------------------------------------------------
+
+
+Evaluation report (summary)
+---------------------------------------------
+NOT EVALUATED
