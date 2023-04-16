@@ -1,2 +1,2 @@
 # Embeded_contest_team2221
-这是2021年嵌入式芯片与系统设计竞赛应用赛道2221队的开源代码
+This is the open source code and dataset from Team 2221 of the 2021 Embedded Chip and System Design Competition Application Track.
